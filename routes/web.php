@@ -8,10 +8,15 @@ Route::get('/', function () {
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'active.user'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+
+ Route::get('/active', function () {
+    return 'active';
+})->name('active')->middleware(['auth', 'active.user']);
+
+Route::middleware(['auth', 'active.user'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
